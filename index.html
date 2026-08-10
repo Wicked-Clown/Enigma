@@ -488,15 +488,15 @@ document.querySelectorAll('.reveal').forEach(el=>new IntersectionObserver(es=>es
 // GOLD PRICE
 async function fetchGold(){
   try{
-    const r=await fetch('https://goldprice.dev/v1/prices?symbol=XAU-GBP-SPOT');
+    const r=await fetch('https://api.goldprice.dev/v1/prices?symbol=XAU-GBP-SPOT',{headers:{'X-API-Key':'ga_live_iG27Hdz8iYbmbmmW2XwurhvOB_jdzEgcoEHor9EP'}});
     const d=await r.json();
-    const oz=d.price;
+    const oz=parseFloat(d.price);
     if(oz&&oz>0){
       const g=oz/31.1035,ct18=g*0.75;
       document.getElementById('goldPrice').textContent='£'+g.toFixed(2);
       document.getElementById('goldOz').textContent='£'+Math.round(oz).toLocaleString();
       document.getElementById('gold18ct').textContent='£'+ct18.toFixed(2);
-      const chg=d.change_pct_24h||0;
+      const chg=parseFloat(d.chp)||0;
       const ce=document.getElementById('goldChange');
       ce.textContent=(chg>=0?'+':'')+chg.toFixed(2)+'%';
       ce.className='ticker-change '+(chg>=0?'up':'down');
