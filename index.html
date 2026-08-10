@@ -488,21 +488,21 @@ document.querySelectorAll('.reveal').forEach(el=>new IntersectionObserver(es=>es
 // GOLD PRICE
 async function fetchGold(){
   try{
-    const r=await fetch('https://api.goldprice.dev/v1/prices?symbol=XAU-GBP-SPOT',{headers:{'X-API-Key':'ga_live_iG27Hdz8iYbmbmmW2XwurhvOB_jdzEgcoEHor9EP'}});
+    const r=await fetch('https://xaus.com/api/v1/spot?currency=GBP&unit=gram');
     const d=await r.json();
-    const oz=parseFloat(d.price);
-    if(oz&&oz>0){
-      const g=oz/31.1035,ct18=g*0.75;
+    const g=parseFloat(d.xau.price);
+    if(g&&g>0){
+      const oz=g*31.1035,ct18=g*0.75;
       document.getElementById('goldPrice').textContent='£'+g.toFixed(2);
       document.getElementById('goldOz').textContent='£'+Math.round(oz).toLocaleString();
       document.getElementById('gold18ct').textContent='£'+ct18.toFixed(2);
-      const chg=parseFloat(d.chp)||0;
+      const chg=parseFloat(d.xau.change_pct_24h)||0;
       const ce=document.getElementById('goldChange');
       ce.textContent=(chg>=0?'+':'')+chg.toFixed(2)+'%';
       ce.className='ticker-change '+(chg>=0?'up':'down');
     }
   }catch(e){
-    console.error('Gold price fetch failed',e);
+    console.error('Gold fetch failed',e);
   }
 }
 fetchGold();setInterval(fetchGold,60000);
